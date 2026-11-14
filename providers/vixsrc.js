@@ -13,9 +13,20 @@ const VIXSRC_HEADERS = {
 async function fetchApi(url) {
     try {
         const response = await axios.get(url, { headers: VIXSRC_HEADERS, timeout: 10000 });
-        if (response.status !== 200 || !response.data) return null;
-        return response.data;
-    } catch {
+        if (response.status !== 200 || !response.data?.src) {
+            console.warn('[Vixsrc] Upstream response missing src', {
+                status: response.status,
+                contentType: response.headers['content-type']
+            });
+        }
+        return response.status === 200 ? response.data : null;
+    } catch (error) {
+        console.warn('[Vixsrc] Upstream request failed', {
+            status: error.response?.status,
+            contentType: error.response?.headers?.['content-type'],
+            code: error.code,
+            causeCode: error.cause?.code
+        });
         return null;
     }
 }
