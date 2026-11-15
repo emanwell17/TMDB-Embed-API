@@ -1,0 +1,15 @@
+{
+  "name": "tmdb-embed-api-test",
+  "main": "cloudflare-worker.mjs",
+  "compatibility_date": "2026-11-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "containers": [
+    { "class_name": "EmbedApi", "image": "./Dockerfile", "max_instances": 1 }
+  ],
+  "durable_objects": {
+    "bindings": [{ "name": "EMBED_API", "class_name": "EmbedApi" }]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["EmbedApi"] }
+  ]
+}
